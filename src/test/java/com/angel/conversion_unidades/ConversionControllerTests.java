@@ -58,7 +58,24 @@ class ConversionControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.longitud", contains("cm", "ft", "in", "km", "m", "mi", "mm", "yd")))
                 .andExpect(jsonPath("$.peso", contains("g", "kg", "lb", "mg", "oz", "t")))
-                .andExpect(jsonPath("$.temperatura", contains("C", "F", "K")));
+                .andExpect(jsonPath("$.temperatura", contains("C", "F", "K")))
+                .andExpect(jsonPath("$.divisa", contains("EUR", "MXN", "USD")));
+    }
+
+    @Test
+    void divisaUsdAMxn() throws Exception {
+        mvc.perform(get("/convertir/divisa").param("valor", "100").param("de", "USD").param("a", "MXN"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.valorOriginal").value(100))
+                .andExpect(jsonPath("$.unidadOrigen").value("USD"))
+                .andExpect(jsonPath("$.resultado").value(1710.0))
+                .andExpect(jsonPath("$.unidadDestino").value("MXN"));
+    }
+
+    @Test
+    void divisaNoConfiguradaDevuelve400() throws Exception {
+        mvc.perform(get("/convertir/divisa").param("valor", "1").param("de", "USD").param("a", "JPY"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

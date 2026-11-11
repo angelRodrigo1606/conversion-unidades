@@ -1,3 +1,11 @@
 spring:
   application:
     name: conversion-unidades
+
+# Tasas de cambio: cuántas unidades de cada divisa equivalen a 1 unidad de la divisa base.
+divisas:
+  base: USD
+  tasas:
+    USD: 1.0
+    EUR: 0.92
+    MXN: 17.10
